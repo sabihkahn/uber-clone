@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-
+import { CaptionDatacontext } from '../context/CaptionContext'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const CaptionSignup = () => {
-
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [firstName, setFirstName] = useState('')
@@ -13,11 +15,14 @@ const CaptionSignup = () => {
   const [vehiclePlate, setVehiclePlate] = useState('')
   const [vehicleCapacity, setVehicleCapacity] = useState('')
   const [vehicleType, setVehicleType] = useState('')
-  const [captiondata, setcaptiondata] = useState({})
+
+  const { caption, setcaption } = React.useContext(CaptionDatacontext)
+
+
 
   const submitHandler = async (e) => {
     e.preventDefault()
-    setcaptiondata({
+    const captionData = {
       fullname: {
         firstname: firstName,
         lastname: lastName
@@ -30,11 +35,21 @@ const CaptionSignup = () => {
         capacity: vehicleCapacity,
         vehicleType: vehicleType
       }
+    }
+
+    await axios.post(`${import.meta.env.VITE_BASE_URL}/caption/register`, captionData).then((res) => {
+      if ([201, 202, 203, 204, 205].includes(res.status)) {
+        localStorage.setItem('caption', res.data)
+        localStorage.setItem('token', res.data.token)
+        console.log(res.data.caption)
+        setcaption(res.data.caption)
+        navigate('/caption-home')
+      }
     })
 
 
 
-     setEmail('')
+    setEmail('')
     setFirstName('')
     setLastName('')
     setPassword('')

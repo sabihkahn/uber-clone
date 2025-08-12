@@ -1,36 +1,54 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import { useContext } from 'react'
+import { UserDatacontext } from '../context/UserContext'
 const UserSignup = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
+  const [firstname, setFirstName] = useState('')
+  const [lastname, setLastName] = useState('')
   const [userdata, setuserdata] = useState({})
+  const { user, setuser } = useContext(UserDatacontext)
+  const navigate = useNavigate()
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault()
-    setuserdata({
-      fullname:{
-        firstName:firstName,
-        lastName:lastName
+
+    const newuser = {
+      fullname: {
+        firstname: firstname,
+        lastname: lastname
       },
       email: email,
       password: password
-    })
-    console.log(userdata)
-    setFirstName('')
-    setLastName('')
-    setEmail('')
-    setPassword('')
+    }
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/user/register`, newuser)
+      if (response.status == 200 || response.status == 201) {
+        const data = response.data
+        setuser(data.user)
+         localStorage.setItem('token', data.token)
+        console.log(data)
+        navigate('/home')
+      }
+
+      setFirstName('')
+      setLastName('')
+      setEmail('')
+      setPassword('')
+    } catch (error) {
+      console.log(error);
+
+    }
   }
 
 
 
 
   return (
-     <div>
+    <div>
       <div className='p-7 h-screen flex flex-col justify-between'>
         <div>
           <img className='w-16 mb-10' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYQy-OIkA6In0fTvVwZADPmFFibjmszu2A0g&s" alt="" />
@@ -46,7 +64,7 @@ const UserSignup = () => {
                 className='bg-[#eeeeee] w-1/2 rounded-lg px-4 py-2 border  text-lg placeholder:text-base'
                 type="text"
                 placeholder='First name'
-                value={firstName}
+                value={firstname}
                 onChange={(e) => {
                   setFirstName(e.target.value)
                 }}
@@ -56,7 +74,7 @@ const UserSignup = () => {
                 className='bg-[#eeeeee] w-1/2  rounded-lg px-4 py-2 border  text-lg placeholder:text-base'
                 type="text"
                 placeholder='Last name'
-                value={lastName}
+                value={lastname}
                 onChange={(e) => {
                   setLastName(e.target.value)
                 }}

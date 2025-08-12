@@ -8,7 +8,7 @@ module.exports.register = async (req, res, next) => {
     return res.status(400).json({ errors: errors.array() });
   }
   const { fullname, email, password } = req.body
-  const isuseralreadyexist = userModel.findOne({ email })
+  const isuseralreadyexist = await userModel.findOne({ email })
   if (isuseralreadyexist) {
     res.status(400).json({ message: "user already exist" })
   }
@@ -29,11 +29,7 @@ module.exports.login = async (req, res, next) => {
     return res.status(400).json({ errors: errors.array() });
   }
   const { email, password } = req.body
-  const isuseralreadyexist = userModel.findOne({ email })
-  if (isuseralreadyexist) {
-    res.status(400).json({ message: "user already exist" })
-  }
-
+  
   const user = await userModel.findOne({ email }).select('+password');
   if (!user) {
     return res.status(401).json({ message: 'invalid email or password' });
