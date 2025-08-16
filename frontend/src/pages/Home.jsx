@@ -5,6 +5,8 @@ import 'remixicon/fonts/remixicon.css'
 import LocationSearchPannel from '../components/LocationSearchPannel'
 import VehiclePannel from '../components/VehiclePannel'
 import ConfirmRide from '../components/ConfirmRide'
+import LookingForDriver from '../components/LookingForDriver'
+import WaitingForDriver from '../components/WaitingForDriver'
 const Home = () => {
 
   const [pick, setpick] = useState('')
@@ -16,6 +18,14 @@ const Home = () => {
   const vehiclepannelref = useRef(null)
   const [confirmRidepannel, setconfirmRidepannel] = useState(false)
   const confirmRidepannelref = useRef(null)
+  const [vehiclefound, setvehiclefound] = useState(false)
+  const vehiclefoundref = useRef(null)
+ const [WaitingForDriver1, setWaitingForDriver1] = useState(false)
+ const WaitingForDriverRef = useRef(null)
+
+
+
+
   const submitHandler = async (e) => {
     e.preventDefault()
   }
@@ -52,24 +62,48 @@ const Home = () => {
       gsap.to(vehiclepannelref.current, {
         transform: 'translateY(0)'
       })
-    }else{
-      gsap.to(vehiclepannelref.current,{
-        transform:"translateY(100%)"
+    } else {
+      gsap.to(vehiclepannelref.current, {
+        transform: "translateY(100%)"
       })
     }
-  },[vehiclepannelOpen])
- 
-    useGSAP(() => {
+  }, [vehiclepannelOpen])
+
+  useGSAP(() => {
     if (confirmRidepannel) {
       gsap.to(confirmRidepannelref.current, {
         transform: 'translateY(0)'
       })
-    }else{
-      gsap.to(confirmRidepannelref.current,{
-        transform:"translateY(100%)"
+    } else {
+      gsap.to(confirmRidepannelref.current, {
+        transform: "translateY(100%)"
       })
     }
-  },[confirmRidepannel])
+  }, [confirmRidepannel])
+
+  useGSAP(() => {
+    if (vehiclefound) {
+      gsap.to(vehiclefoundref.current, {
+        transform: 'translateY(0)'
+      })
+    } else {
+      gsap.to(vehiclefoundref.current, {
+        transform: "translateY(100%)"
+      })
+    }
+  }, [vehiclefound])
+
+  useGSAP(() => {
+    if (WaitingForDriver1) {
+      gsap.to(WaitingForDriverRef.current, {
+        transform: 'translateY(0)'
+      })
+    } else {
+      gsap.to(WaitingForDriverRef.current, {
+        transform: "translateY(100%)"
+      })
+    }
+  }, [WaitingForDriver1])
 
 
   return (
@@ -106,11 +140,17 @@ const Home = () => {
           <LocationSearchPannel vehiclepannelOpen={vehiclepannelOpen} setvehiclepannelOpen={setvehiclepannelOpen} panelOpen={panelOpen} setpanelOpen={setpanelOpen} />
         </div>
       </div>
-      <div ref={vehiclepannelref} className='fixed z-10 bottom-0 w-full  bg-white px-3 py-6 translate-y-full'>
-      <VehiclePannel setvehiclepannelOpen={setvehiclepannelOpen} />
+      <div ref={vehiclepannelref} className='fixed z-10 bottom-0 w-full  bg-white px-3 py-6 translate-y-full pt-12'>
+        <VehiclePannel setvehiclepannelOpen={setvehiclepannelOpen} setconfirmRidepannel={setconfirmRidepannel} />
       </div>
-      <div ref={confirmRidepannelref} className='fixed z-10 bottom-0 w-full  bg-white px-3 py-6 translate-y-full'>
-      <ConfirmRide />
+      <div ref={confirmRidepannelref} className='fixed z-10 bottom-0 w-full  bg-white px-3 py-6 translate-y-full pt-12'>
+        <ConfirmRide setconfirmRidepannel={setconfirmRidepannel} setvehiclefound={setvehiclefound} />
+      </div>
+      <div ref={vehiclefoundref}  className='fixed z-10 bottom-0 w-full  bg-white px-3 py-6 translate-y-full pt-12'>
+       <LookingForDriver setvehiclefound={setvehiclefound} setconfirmRidepannel={setconfirmRidepannel} />
+      </div>
+      <div ref={WaitingForDriverRef} className='fixed z-10 bottom-0 w-full  bg-white px-3 py-6  pt-12'>
+      <WaitingForDriver setWaitingForDriver1={setWaitingForDriver1} />
       </div>
     </div>
   )
