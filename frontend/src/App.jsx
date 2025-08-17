@@ -11,12 +11,14 @@ import Userlogout from './pages/Userlogout'
 import CaptionHome from './pages/CaptionHome'
 import CaptionProtectwrapper from './pages/CaptionProtectwrapper'
 import Captionlogout from './pages/Captionlogout'
+import Riding from './pages/Riding'
 const App = () => {
   return (
     <>
     
     <Routes>
       <Route path="/" element={<Start />} />
+      <Route path="/riding" element={<Riding />} />
       <Route path="/home" element={
         <Userprotectedwrapper>
         <Home/>
@@ -40,12 +42,6 @@ const App = () => {
       <Route path="/caption-login" element={<CaptionLogin/>} />
       <Route path='/caption-signup' element={<CaptionSignup />} />
     </Routes>
-
-    
-
-
-
-
     
     </>
   )
