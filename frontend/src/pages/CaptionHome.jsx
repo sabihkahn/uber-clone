@@ -2,9 +2,46 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import CaptionDetails from '../components/CaptionDetails'
 import Ridepopup from '../components/Ridepopup'
+import { useGSAP } from '@gsap/react'
+import gsap from 'gsap'
+import { useState } from 'react'
+import { useRef } from 'react'
+import ConfirmRidepopup from '../components/ConfirmRidepopup'
+
 
 
 const CaptionHome = () => {
+
+  const [ridePopupPanel, setRidePopupPanel] = useState(true)
+  const [confirmRidePopupPanel, setConfirmRidePopupPanel] = useState(false)
+
+  const ridePopupPanelRef = useRef(null)
+  const confirmRidePopupPanelRef = useRef(null)
+
+ useGSAP(function () {
+        if (ridePopupPanel) {
+            gsap.to(ridePopupPanelRef.current, {
+                transform: 'translateY(0)'
+            })
+        } else {
+            gsap.to(ridePopupPanelRef.current, {
+                transform: 'translateY(100%)'
+            })
+        }
+    }, [ ridePopupPanel ])
+ useGSAP(function () {
+        if (confirmRidePopupPanel) {
+            gsap.to(confirmRidePopupPanelRef.current, {
+                transform: 'translateY(0)'
+            })
+        } else {
+            gsap.to(confirmRidePopupPanelRef.current, {
+                transform: 'translateY(100%)'
+            })
+        }
+    }, [ confirmRidePopupPanel ])
+
+
   return (
     <div className='h-screen'>
 
@@ -23,8 +60,11 @@ const CaptionHome = () => {
       <div className='h2/5 p-6 '>
         <CaptionDetails />
       </div>
-      <div className='fixed z-10 bottom-0 w-full   bg-white px-3 py-6  pt-12'>
-    <Ridepopup />
+      <div ref={ridePopupPanelRef} className='fixed z-10 bottom-0 w-full translate-y-full   bg-white px-3 py-6  pt-12'>
+        <Ridepopup setRidePopupPanel={setRidePopupPanel}  setConfirmRidePopupPanel={setConfirmRidePopupPanel} />
+      </div>
+      <div ref={confirmRidePopupPanelRef} className='fixed z-10 bottom-0 h-screen w-full translate-y-full   bg-white px-3 py-6  pt-12'>
+        <ConfirmRidepopup setConfirmRidePopupPanel={setConfirmRidePopupPanel} setRidePopupPanel={setRidePopupPanel} />
       </div>
     </div>
   )
